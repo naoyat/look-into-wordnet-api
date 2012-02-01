@@ -1,0 +1,9 @@
+The WordNet morphological processor, Morphy, is accessed through these functions:
+
+morphinit() is used to open the exception list files. It returns 0 if successful, -1 otherwise. The exception list files must be opened before morphstr() or morphword() are called.
+
+re_morphinit() is used to close the exception list files and reopen them, and is used exclusively for WordNet development. Return codes are as described above.
+
+morphstr() is the basic user interface to Morphy. It tries to find the base form (lemma) of the word or collocation origstr in the specified pos . The first call (with origstr specified) returns a pointer to the first base form found. Subsequent calls requesting base forms of the same string must be made with the first argument of NULL. When no more base forms for origstr can be found, NULL is returned. Note that morphstr() returns a pointer to a static character buffer. A subsequent call to morphstr() with a new string (instead of NULL ) will overwrite the string pointed to by a previous call. Users should copy the returned string into a local buffer, or use the C library function strdup to duplicate the returned string into a malloc'd buffer.
+
+morphword() tries to find the base form of word in the specified pos . This function is called by morphstr() for each individual word in a collocation. Note that morphword() returns a pointer to a static character buffer. A subsequent call to morphword() will overwrite the string pointed to by a previous call. Users should copy the returned string into a local buffer, or use the C library function strdup to duplicate the returned string into a malloc'd buffer.
