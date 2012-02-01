@@ -1,0 +1,26 @@
+Look into WordNet(R) API - WordNet(R)のAPIの使い方を自習するためのコード群
+であります
+
+(c) 2012 by naoya_t
+
+
+■必要なもの
+
+- GNU C++
+- WordNet(R) 3.0
+  ↑Makefileをいじれば2.1でも動くかも
+
+■簡単な用法
+
+$ make test SEARCHSTR="like" TESTID=2
+とか
+
+■注意事項
+
+GNU Lesser General Public License version 2 で公開します。COPYING 参照。
+無保証です。
+あと、辞書は付属していません。
+
+■連絡先
+
+@naoya_t とか

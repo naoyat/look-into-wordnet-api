@@ -1,0 +1,102 @@
+
+
+char* findtheinfo(char *searchstr, int pos, int ptr_type, int sense_num);
+SynsetPtr findtheinfo_ds(char *searchstr, int pos, int ptr_type, int sense_num);
+
+    findtheinfo() はデータベースインターフェースアプリケーションで使うためのプライマリな検索アルゴリズムである。
+    検索結果は自動的に整形され、そのテキストバッファへのポイントが返される。
+    WNHOME/include/wn.h にリストされているすべての検索が findtheinfo() で出来る。
+    findtheinfo_ds() はその検索の大半の実行に使えて、結果はリンクドリストデータ構造で返される。
+    これは単に表示するだけでなく、検索結果を解析する必要のあるアプリケーションで使うためのもの。
+
+    どちらの関数も同じ引数をとる：
+     - searchstr は検索したい単語もしくはコロケーション；
+     - pos は検索対象とする文法カテゴリを示す；
+     - ptr_type は searchstr のposにおける有効な検索タイプの１つ
+       （どの検索が使えるかは後述の is_defined() を呼ぶことで分かる。）
+     - sense_num はsearchstrのposにおける全ての意味について
+       検索を行いたいのであれば ALLSENSES を、
+       そうでなければどの意味について検索するかを示す正の整数を。
+
+    findtheinfo_ds() は、synsetsを表現するリンクドリストデータ構造体を返す。
+    （すべての）意味は、Synset データ構造の nextss フィールドを通じてリンクされている。
+    それぞれの意味について、ptr_type で指定した検索にマッチした synsets が ptrlist フィールドを通じてリンクされる。
+    返されるリンクドリストについて詳しくは後述の Synset Navigation を見よ。
+
+
+unsigned int  is_defined(char *searchstr, int pos);
+
+    is_defined() は、品詞 pos において searchstr に対して有効な検索タイプ各々に対応するビットをセットし、結果を unsigned int で返す。
+    各ビット番号は WNHOME/include/wn.h で定義されているポインタタイプ定数に対応している。
+    例えば、ビット2がセットされているなら、 searchstrに対するHYPERPTR検索が有効になる。
+    可能な検索は29種類ある。
+
+
+unsigned int  in_wn(char *searchstr, int pos);
+
+    in_wn() は、searchstrの１つ以上の意味を含む文法カテゴリを WordNet データベースから見つけるために使われる。
+    pos が ALL_POS なら、全ての文法カテゴリがチェックされる。そうでなければ、渡された品詞のみがチェックされる。
+    searchstrを含む各文法カテゴリに対応するビットがセットされた unsigned int値が返される。ビット番号は品詞番号に対応。
+    品詞 pos にsearchstrが存在しなければ 0 が返される。
+
+
+IndexPtr index_lookup(char *searchstr, int pos);
+IndexPtr parse_index(long offset, int dabase, char *line);
+IndexPtr getindex(char *searchstr, int pos);
+
+    index_lookup() は pos に対応するインデックスファイルから searchstr を探し、パースされたエントリをIndexデータ構造体へのポインタで返す。
+    searchstr はインデックスファイルに含まれる単語の形に完全に一致していなければならない（小文字のみ、ハイフンとアンダースコアは同じ位置）。
+    一致するものが見つからなければNULLを返す。
+
+    parse_index() はあるインデックスファイルからあるエントリをパースし、パースされたエントリをIndexデータ構造体へのポインタで返す。
+    バイトオフセットと文法カテゴリが渡されると、対応するファイルの希望の位置にあるインデックスエントリを読む。
+    行が渡されると、行がインデックスファイルエントリを含み、データベースインデックスファイルは調べない。
+    しかし、Index構造体に情報をストアするために、offset と dbase はやはり渡さなければならない。
+
+    getindex() は、pos に対応するインデックスファイルから searchstr を「賢く」検索する。
+    この関数はsearchstrに対しアンダースコアをハイフンに、ハイフンをアンダースコアに置換し、
+    ハイフンとアンダースコアを除去し、ピリオドを除去するというアルゴリズムを適用し、
+    pos に対応するインデックスファイルの中からあるエントリに完全一致する文字列の形を探し出そうとする。
+    index_lookup() は、変換された各文字列に対し一致が見つかるか、あるいは全ての文字列を試し終わるまで呼ばれる。
+
+    この関数は searchstrをパースしたIndexデータ構造体へのポインタを返すか、マッチするものが見つからなければNULLを返す。
+
+
+SynsetPtr read_synset(int pos, long synset_offset, char *searchstr);
+SynsetPtr parse_synset(FILE *fp, int pos, char *searchstr);
+
+    read_synset() は、あるデータファイルのあるバイトオフセットからsynsetを読むのに使われる。
+    この関数は pos に対応するデータファイル内の位置 synset_offsetへ fseek (3) し、parse_synset() を呼び出して synset を読んでパースする。
+    パースしたsynsetを含んだSynsetデータ構造体へのポインタが返される。
+
+    parse_synset() は fp で示されたファイルの現在のオフセットで synset を読む。
+    pos は文法カテゴリ、そして searchstr は、NULLでなければ、呼び出す者が関心をもつsynsetの中の単語を示す。
+    synset にある単語のどれかと searchstr を一致させる試みがなされる。
+    完全一致するものが１つ見つかると、Synset構造体のwhichwordフィールドが、synset内の単語の番号にセットされる（1から数えて）。
+
+
+void free_syns(SynsetPtr synptr);
+void free_synset(SynsetPtr synptr);
+void free_index(IndexPtr idx);
+
+    free_syns() は、findtheinfo_ds() がアロケートしたSynset構造体のリンクドリストを解放するのに使われる。synptr は解放したいリストへのポインタ。
+    free_synset() は synptr が指しているSynset構造体を解放する。
+    free_index() は idx が指しているIndex構造体を解放する。
+
+
+SynsetPtr traceptrs_ds(SynsetPtr synptr, int ptr_type, int pos, int depth);
+
+    traceptrs_ds() は、synptr が指すsynsetから始めてポインターをトレースしていき、tr_type にマッチさせる再帰的検索アルゴリズムである。
+    traceptrs_ds() が呼ばれる際 depth を１にすると、再帰的検索を示す；0 は非再帰的呼び出し。
+    synptr は、ptr_type 型のポインタを検索する synset を表すデータ構造体を指し示すポインタ型の一致が見つかると、
+    指された synset は nextss チェーンを読み進む。?
+    再帰検索が生成するツリーのレベルは ptrlist フィールド構造経由で、ツリーの先端（末端）を示す NULL が見つかる所までリンクされる。
+    この関数は通常、findtheinfo_ds() から単語の各意味に対して呼び出される。
+    返されるリンクドリストについての詳細は、後述の Synset Navigation を参照のこと。
+
+
+ char *do_trace(SynsetPtr synptr, int ptr_type, int pos, int depth);
+
+     do_trace() は、Synset構造体 synptr に対し、文法カテゴリ pos において  ptr_type で示された検索を実行する。depth は前述の定義のとおり。
+     do_trace() は検索結果を整形したテキストバッファとして返す。
+
