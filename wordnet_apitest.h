@@ -2,11 +2,11 @@
 // Use of this source code is governed by a LGPL-style
 // license that can be found in the COPYING file.
 
-#ifndef WORDNET_TEST_H_
-#define WORDNET_TEST_H_
+#ifndef WORDNET_APITEST_H_
+#define WORDNET_APITEST_H_
 
-int wordnet_test(char *searchstr, int test_id);
-void wordnet_test_usage();
+int wordnet_apitest(char *searchstr, int test_id);
+void wordnet_apitest_usage();
 
 void wordnet_test_findtheinfo(char *searchstr);
 void wordnet_test_findtheinfo_ds(char *searchstr);
@@ -23,4 +23,4 @@ void wordnet_test_free_index(char *searchstr);
 void wordnet_test_traceptrs_ds(char *searchstr);
 void wordnet_test_do_trace(char *searchstr);
 
-#endif  // WORDNET_TEST_H_
+#endif  // WORDNET_APITEST_H_

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a LGPL-style
 // license that can be found in the COPYING file.
 
-#include "./wordnet_test.h"
+#include "./wordnet_apitest.h"
 #include <stdio.h>
 #include <wn.h>
 
@@ -13,8 +13,8 @@ using std::endl;
 
 #include "./wordnet_verbose.h"
 
-void wordnet_test_usage() {
-  printf("usage: wordnet_test <test-id> <searchstr>\n");
+void wordnet_apitest_usage() {
+  printf("usage: wordnet_apitest <test-id> <searchstr>\n");
   printf("    test 1: findtheinfo()\n");
   printf("    test 2: findtheinfo_ds()\n");
   printf("    test 3: is_defined()\n");
@@ -31,7 +31,7 @@ void wordnet_test_usage() {
   printf("    test 14: do_trace\n");
 }
 
-int wordnet_test(char *searchstr, int test_id) {
+int wordnet_apitest(char *searchstr, int test_id) {
   int init_status = wninit();
   if (init_status != 0) {
     printf("ERROR: cannot open WordNet database.\n");

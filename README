@@ -12,7 +12,8 @@ Look into WordNet(R) API - WordNet(R)のAPIの使い方を自習するための�
 
 ■簡単な用法
 
-$ make test TEXT="like" TESTID=2
+$ make apitest TEXT="like" TESTID=2
+$ make lemmatest TEXT="found"
 とか
 
 ■注意事項

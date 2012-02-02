@@ -4,15 +4,15 @@
 
 #include <stdlib.h>
 
-#include "./wordnet_test.h"
+#include "./wordnet_apitest.h"
 
 int main(int argc, char **argv) {
   if (argc != 3) {
-    wordnet_test_usage();
+    wordnet_apitest_usage();
   } else {
     int   test_id   = atoi(argv[1]);
     char *searchstr = argv[2];
-    if (wordnet_test(searchstr, test_id) != 0) wordnet_test_usage();
+    if (wordnet_apitest(searchstr, test_id) != 0) wordnet_apitest_usage();
   }
   return 0;
 }
