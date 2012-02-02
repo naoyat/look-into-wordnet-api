@@ -17,9 +17,17 @@ test: wordnet_test
 	./wordnet_test $(TESTID) $(SEARCHSTR)
 
 
-WORDNET_ASOBI_OBJECTS = wordnet_asobi_main.o
-wordnet_asobi: $(WORDNET_ASOBI_OBJECTS)
+WORDNET_ASOBI_OBJECTS = asobi_main.o wutil.o Lemma.o
+asobi: $(WORDNET_ASOBI_OBJECTS)
 	$(CPP) $(CFLAGS) -L$(WORDNET_DIR)/lib -lWN -o $@ $(WORDNET_ASOBI_OBJECTS)
+
+asobi_main.o: asobi_main.cc
+	$(CPP) $(CFLAGS) -c -I$(WORDNET_DIR)/include -o $@ $<
+wutil.o: wutil.cc wutil.h
+	$(CPP) $(CFLAGS) -c -I$(WORDNET_DIR)/include -o $@ $<
+Lemma.o: Lemma.cc Lemma.h
+	$(CPP) $(CFLAGS) -c -I$(WORDNET_DIR)/include -o $@ $<
+
 
 WORDNET_TEST_OBJECTS = wordnet_test_main.o wordnet_test.o wordnet_verbose.o
 wordnet_test: $(WORDNET_TEST_OBJECTS)
