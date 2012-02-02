@@ -46,6 +46,8 @@ const char *choose_str(const char *normal_str, const char *verbose_str) {
 }
 
 const char *human_ptr_type(int ptr_type) {
+  if (g_choice == 0) return ptrtyp[ptr_type];
+  // return choose_str(ptrtyp[ptr_type], ptrtyp[ptr_type]);
   switch (ptr_type) {
     case ANTPTR:         // 1; Antonyms
       return choose_str("!", "antonyms");
@@ -155,13 +157,13 @@ std::string say_fn_begin(const char *fnname) {
   // ss << ANSI_UNDERLINE_ON;
   // ss << ANSI_BOLD_ON << fnname << ANSI_BOLD_OFF;
   ss << fnname;
-  ss << "(";
+  // ss << "(";
   return ss.str();
 }
 
 std::string say_fn_end(bool is_void_func) {
   std::stringstream ss;
-  ss << ")";
+  // ss << ")";
   // ss << ANSI_UNDERLINE_OFF;
   if (is_void_func)
     ss << ";";
@@ -320,12 +322,12 @@ std::string say_synset(SynsetPtr synset) {
 //                   int sense_num);
 char *verbose_findtheinfo(char *searchstr,
                           int pos, int ptr_type, int sense_num) {
-  cout << say_fn_begin("findtheinfo");
+  cout << say_fn_begin("findtheinfo") << "(";
   cout << say_searchstr(searchstr) << ", ";
   cout << say_pos_name(pos) << ", ";
   cout << say_ptr_type(ptr_type) << ", ";
   cout << say_sense_num(sense_num);
-  cout << say_fn_end();
+  cout << ")" << say_fn_end();
 
   char *res = findtheinfo(searchstr, pos, ptr_type, sense_num);
   cout << ANSI_FGCOLOR_GREEN;
@@ -348,12 +350,12 @@ char *verbose_findtheinfo(char *searchstr,
 //                          int sense_num);
 SynsetPtr verbose_findtheinfo_ds(char *searchstr,
                                  int pos, int ptr_type, int sense_num) {
-  cout << say_fn_begin("findtheinfo");
+  cout << say_fn_begin("findtheinfo") << "(";
   cout << say_searchstr(searchstr) << ", ";
   cout << say_pos_name(pos) << ", ";
   cout << say_ptr_type(ptr_type) << ", ";
   cout << say_sense_num(sense_num);
-  cout << say_fn_end();
+  cout << ")" << say_fn_end();
 
   SynsetPtr synset = NULL;
   switch (ptr_type) {
@@ -387,10 +389,10 @@ SynsetPtr verbose_findtheinfo_ds(char *searchstr,
 
 // unsigned int is_defined(char *searchstr, int pos);
 unsigned int verbose_is_defined(char *searchstr, int pos) {
-  cout << say_fn_begin("is_defined");
+  cout << say_fn_begin("is_defined") << "(";
   cout << say_searchstr(searchstr) << ", ";
   cout << say_pos_name(pos);
-  cout << say_fn_end();
+  cout << ")" << say_fn_end();
 
   unsigned int flags = is_defined(searchstr, pos);  // unsigned int
   cout << ANSI_FGCOLOR_BLUE << say_binary(flags, 32, ".o")
@@ -404,10 +406,10 @@ unsigned int verbose_is_defined(char *searchstr, int pos) {
 
 // unsigned int in_wn(char *searchstr, int pos);
 unsigned int verbose_in_wn(char *searchstr, int pos) {
-  cout << say_fn_begin("in_wn");
+  cout << say_fn_begin("in_wn") << "(";
   cout << say_searchstr(searchstr) << ", ";
   cout << say_pos_name(pos);
-  cout << say_fn_end();
+  cout << ")" << say_fn_end();
 
   unsigned int res = in_wn(searchstr, pos);
   if (pos == ALL_POS) {
@@ -427,10 +429,10 @@ unsigned int verbose_in_wn(char *searchstr, int pos) {
 
 // IndexPtr index_lookup(char *searchstr, int pos);
 IndexPtr verbose_index_lookup(char *searchstr, int pos) {
-  cout << say_fn_begin("index_lookup");
+  cout << say_fn_begin("index_lookup") << "(";
   cout << say_searchstr(searchstr) << ", ";
   cout << say_pos_name(pos);
-  cout << say_fn_end();
+  cout << ")" << say_fn_end();
 
   IndexPtr index = index_lookup(searchstr, pos);
   if (index) {
@@ -449,11 +451,11 @@ IndexPtr verbose_index_lookup(char *searchstr, int pos) {
 
 // IndexPtr parse_index(long offset, int dabase, char *line);
 IndexPtr verbose_parse_index(int32_t offset, int dabase, char *line) {
-  cout << say_fn_begin("parse_index");
+  cout << say_fn_begin("parse_index") << "(";
   cout << "offset=" << offset << ", ";
   cout << "dabase=" << dabase << ", ";
   cout << "line=" << line;
-  cout << say_fn_end();
+  cout << ")" << say_fn_end();
 
   cout << ANSI_FGCOLOR_GREEN;
   IndexPtr res = parse_index(offset, dabase, line);
@@ -466,10 +468,10 @@ IndexPtr verbose_parse_index(int32_t offset, int dabase, char *line) {
 
 // IndexPtr getindex(char *searchstr, int pos);
 IndexPtr verbose_getindex(char *searchstr, int pos) {
-  cout << say_fn_begin("getindex");
+  cout << say_fn_begin("getindex") << "(";
   cout << say_searchstr(searchstr) << ", ";
   cout << say_pos_name(pos);
-  cout << say_fn_end();
+  cout << ")" << say_fn_end();
 
   cout << ANSI_FGCOLOR_GREEN;
   IndexPtr res = getindex(searchstr, pos);
@@ -482,11 +484,11 @@ IndexPtr verbose_getindex(char *searchstr, int pos) {
 
 // SynsetPtr read_synset(int pos, long synset_offset, char *searchstr);
 SynsetPtr verbose_read_synset(int pos, int32_t synset_offset, char *searchstr) {
-  cout << say_fn_begin("read_synset");
+  cout << say_fn_begin("read_synset") << "(";
   cout << say_pos_name(pos) << ", ";
   cout << "synset_offset=" << synset_offset << ", ";
   cout << say_searchstr(searchstr);
-  cout << say_fn_end();
+  cout << ")" << say_fn_end();
 
   cout << ANSI_FGCOLOR_GREEN;
   SynsetPtr res = read_synset(pos, synset_offset, searchstr);
@@ -499,11 +501,11 @@ SynsetPtr verbose_read_synset(int pos, int32_t synset_offset, char *searchstr) {
 
 // SynsetPtr parse_synset(FILE *fp, int pos, char *searchstr);
 SynsetPtr verbose_parse_synset(FILE *fp, int pos, char *searchstr) {
-  cout << say_fn_begin("parse_synset");
+  cout << say_fn_begin("parse_synset") << "(";
   cout << "fp, ";
   cout << say_pos_name(pos) << ", ";
   cout << say_searchstr(searchstr);
-  cout << say_fn_end();
+  cout << ")" << say_fn_end();
 
   cout << ANSI_FGCOLOR_GREEN;
   SynsetPtr res = parse_synset(fp, pos, searchstr);
@@ -516,9 +518,9 @@ SynsetPtr verbose_parse_synset(FILE *fp, int pos, char *searchstr) {
 
 // void free_syns(SynsetPtr synptr);
 void verbose_free_syns(SynsetPtr synptr) {
-  cout << say_fn_begin("free_syns");
+  cout << say_fn_begin("free_syns") << "(";
   cout << "synptr";
-  cout << say_fn_end(true);
+  cout << ")" << say_fn_end(true);
   free_syns(synptr);
   cout << endl;
 }
@@ -526,9 +528,9 @@ void verbose_free_syns(SynsetPtr synptr) {
 
 // void free_synset(SynsetPtr synptr);
 void verbose_free_synset(SynsetPtr synptr) {
-  cout << say_fn_begin("free_synset");
+  cout << say_fn_begin("free_synset") << "(";
   cout << "synptr";
-  cout << say_fn_end(true);
+  cout << ")" << say_fn_end(true);
   free_synset(synptr);
   cout << endl;
 }
@@ -536,9 +538,9 @@ void verbose_free_synset(SynsetPtr synptr) {
 
 // void free_index(IndexPtr idx);
 void verbose_free_index(IndexPtr idx) {
-  cout << say_fn_begin("free_index");
+  cout << say_fn_begin("free_index") << "(";
   cout << "index";
-  cout << say_fn_end(true);
+  cout << ")" << say_fn_end(true);
   free_index(idx);
   cout << endl;
 }
@@ -547,12 +549,12 @@ void verbose_free_index(IndexPtr idx) {
 // SynsetPtr traceptrs_ds(SynsetPtr synptr, int ptr_type, int pos, int depth);
 SynsetPtr verbose_traceptrs_ds(SynsetPtr synptr,
                                int ptr_type, int pos, int depth) {
-  cout << say_fn_begin("traceptrs_ds");
+  cout << say_fn_begin("traceptrs_ds") << "(";
   cout << "synptr, ";
   cout << say_ptr_type(ptr_type) << ", ";
   cout << say_pos_name(pos) << ", ";
   cout << "depth=" << depth;
-  cout << say_fn_end();
+  cout << ")" << say_fn_end();
 
   cout << ANSI_FGCOLOR_GREEN;
   SynsetPtr res = traceptrs_ds(synptr, ptr_type, pos, depth);
@@ -565,12 +567,12 @@ SynsetPtr verbose_traceptrs_ds(SynsetPtr synptr,
 
 // char *do_trace(SynsetPtr synptr, int ptr_type, int pos, int depth);
 char *verbose_do_trace(SynsetPtr synptr, int ptr_type, int pos, int depth) {
-  cout << say_fn_begin("do_trace");
+  cout << say_fn_begin("do_trace") << "(";
   cout << "synptr, ";
   cout << say_ptr_type(ptr_type) << ", ";
   cout << say_pos_name(pos) << ", ";
   cout << "depth=" << depth;
-  cout << say_fn_end();
+  cout << ")" << say_fn_end();
 
   cout << ANSI_FGCOLOR_GREEN;
   char *res = do_trace(synptr, ptr_type, pos, depth);
