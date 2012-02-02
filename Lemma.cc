@@ -1,3 +1,6 @@
+// Copyright 2012 naoya_t.  All Rights Reserved.
+// Use of this source code is governed by a LGPL-style
+// license that can be found in the COPYING file.
 
 #include "./Lemma.h"
 
@@ -6,9 +9,8 @@
 #include <string>
 #include <sstream>
 
-Lemma::Lemma(const char *surface, const char *lemma, int pos) :
-    surface_(surface), lemma_(lemma), pos_(pos)
-{
+Lemma::Lemma(const char *surface, const char *lemma, int pos)
+    : surface_(surface), lemma_(lemma), pos_(pos) {
 }
 
 Lemma::Lemma(const Lemma& lemma) {

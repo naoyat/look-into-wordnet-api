@@ -15,14 +15,12 @@
 #include "./wutil.h"
 #include "./Lemma.h"
 
-using namespace std;
-
 int lookup(char *searchstr) {
   strtolower(searchstr);
 
-  vector<Lemma> lemmata;
+  std::vector<Lemma> lemmata;
 
-  for (int pos=1; pos<=4; ++pos) {
+  for (int pos = 1; pos <= 4; ++pos) {
     char *ms = morphstr(searchstr, pos);
     if (ms) {
       printf(" morphstr(pos=%s): %s\n", partnames[pos], ms);
@@ -34,7 +32,7 @@ int lookup(char *searchstr) {
   }
 
   for (int i = 0; i < lemmata.size(); ++i) {
-    cout << lemmata[i] << endl;
+    std::cout << lemmata[i] << std::endl;
   }
 
   int poss = in_wn(searchstr, ALL_POS);
@@ -43,8 +41,7 @@ int lookup(char *searchstr) {
            (poss & (1<<NOUN)) ? " n" : "",
            (poss & (1<<VERB)) ? " v" : "",
            (poss & (1<<ADJ)) ? " a" : "",
-           (poss & (1<<ADV)) ? " adv" : ""
-           );
+           (poss & (1<<ADV)) ? " adv" : "");
     return __builtin_popcount(poss);
   } else {
     return 0;
@@ -52,10 +49,12 @@ int lookup(char *searchstr) {
 }
 
 void sub(const char *text) {
+  using namespace std;
+
   printf(":: %s\n", text);
   // テキストをスペースで区切って vector<string> に格納
   vector<pair<int, string> > words = tokenize(text);
-  for (int i=0; i<words.size(); ++i) {
+  for (int i = 0; i < words.size(); ++i) {
     int type = words[i].first;
     char *token = const_cast<char*>(words[i].second.c_str());
     printf("%2d) <%c> " ANSI_BOLD_ON "%s" ANSI_BOLD_OFF, 1+i, type, token);
@@ -66,6 +65,8 @@ void sub(const char *text) {
 
 
 int main(int argc, char **argv) {
+  using namespace std;
+
   int wninit_status = wninit();
   if (wninit_status != 0) {
     printf("Cannot open WordNet database.\n");

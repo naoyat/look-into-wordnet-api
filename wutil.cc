@@ -22,7 +22,7 @@ std::vector<std::pair<int, std::string> > tokenize(const char *text) {
       w = NULL;
       if (*p == 0) {
         break;
-      } if (*p == ' ') {
+      } else if (*p == ' ') {
         //
       } else {
         tokens.push_back(std::make_pair(*p, std::string(p, 1)));
