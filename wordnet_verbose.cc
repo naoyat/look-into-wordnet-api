@@ -180,11 +180,9 @@ std::string say_searchstr(const char *searchstr) {
 }
 
 std::string say_pos_name(int pos) {
-  const char *pos_name[5] = { "ALL_POS", "NOUN", "VERB", "ADJ", "ADV", };
-
   std::stringstream ss;
   ss << "pos=" << ANSI_FGCOLOR_RED;
-  ss << pos_name[pos];
+  ss << partnames[pos];  // wn probides partnames[]
   ss << ANSI_FGCOLOR_DEFAULT;
   return ss.str();
 }
