@@ -12,7 +12,7 @@ Look into WordNet(R) API - WordNet(R)のAPIの使い方を自習するための�
 
 ■簡単な用法
 
-$ make test SEARCHSTR="like" TESTID=2
+$ make test TEXT="like" TESTID=2
 とか
 
 ■注意事項

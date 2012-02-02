@@ -1,8 +1,8 @@
 CPP = clang++
 CFLAGS = -O2 -g
 
-SEARCHSTR = ""
 TESTID = 0
+TEXT = ""
 
 WORDNET_DIR = /usr/local/WordNet-3.0
 
@@ -14,7 +14,10 @@ happy: wordnet_test
 	./wordnet_test 1 "happy"
 
 test: wordnet_test
-	./wordnet_test $(TESTID) $(SEARCHSTR)
+	./wordnet_test $(TESTID) "$(TEXT)"
+
+a: asobi
+	./asobi $(TEXT)
 
 
 WORDNET_ASOBI_OBJECTS = asobi_main.o wutil.o Lemma.o
